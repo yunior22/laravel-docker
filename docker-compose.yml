@@ -1,0 +1,81 @@
+version: '3'
+
+networks:
+  laravel:
+    name: laravel
+
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx.dockerfile
+    container_name: nginx
+    depends_on:
+      - php
+      - mysql
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - .:/var/www/html
+    networks:
+      - laravel
+
+  php:
+    build:
+      context: .
+      dockerfile: php.dockerfile
+    container_name: php
+    volumes:
+      - .:/var/www/html
+    networks:
+      - laravel
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mysql:/var/lib/mysql
+    tty: true
+    environment:
+      MYSQL_DATABASE: homestead
+      MYSQL_USER: root
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+      SERVICE_TAG: dev
+      SERVICE_NAME: mysql
+    networks:
+      - laravel
+
+  composer:
+    image: composer:latest
+    container_name: composer
+    volumes:
+      - .:/var/www/html
+    working_dir: /var/www/html
+    networks:
+      - laravel
+
+  artisan:
+    build:
+      context: .
+      dockerfile: php.dockerfile
+    container_name: artisan
+    volumes:
+      - .:/var/www/html
+    working_dir: /var/www/html
+    entrypoint: ['php', 'artisan']
+    networks:
+      - laravel
+
+  yarn:
+    image: node:current-alpine
+    container_name: yarn
+    volumes:
+      - .:/var/www/html
+    working_dir: /var/www/html
+    entrypoint: ['yarn']
+    networks:
+      - laravel
