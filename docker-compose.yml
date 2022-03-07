@@ -14,8 +14,8 @@ services:
       - php
       - mysql
     ports:
-      - 80:80
-      - 443:443
+      - "80:80"
+      - "443:443"
     volumes:
       - .:/var/www/html
     networks:
@@ -35,7 +35,7 @@ services:
     image: mysql:5.7
     container_name: mysql
     ports:
-      - 3306:3306
+      - "3306:3306"
     volumes:
       - ./mysql:/var/lib/mysql
     tty: true
