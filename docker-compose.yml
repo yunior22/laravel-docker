@@ -7,41 +7,45 @@ networks:
 services:
   nginx:
     build:
-      context: .
+      context: ./docker/local/nginx
       dockerfile: nginx.dockerfile
     container_name: nginx
     depends_on:
       - php
       - mysql
+      - redis
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - .:/var/www/html
+      - .:/var/www/html:delegated
     networks:
       - laravel
 
   php:
     build:
-      context: .
+      context: ./docker/local/php
       dockerfile: php.dockerfile
     container_name: php
+    ports:
+      - "9000:9000"
     volumes:
-      - .:/var/www/html
+      - .:/var/www/html:delegated
     networks:
       - laravel
 
   mysql:
-    image: mysql:5.7
+    image: mysql:8.0
     container_name: mysql
     ports:
       - "3306:3306"
     volumes:
-      - ./mysql:/var/lib/mysql
+      - ./docker/local/mysql:/var/lib/mysql:delegated
+    restart: unless-stopped
     tty: true
     environment:
-      MYSQL_DATABASE: homestead
-      MYSQL_USER: root
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: laravel
       MYSQL_PASSWORD: secret
       MYSQL_ROOT_PASSWORD: secret
       SERVICE_TAG: dev
@@ -49,24 +53,45 @@ services:
     networks:
       - laravel
 
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - laravel
+
   composer:
     image: composer:latest
     container_name: composer
     volumes:
-      - .:/var/www/html
+      - .:/var/www/html:delegated
     working_dir: /var/www/html
     networks:
       - laravel
 
   artisan:
     build:
-      context: .
+      context: ./docker/local/php
       dockerfile: php.dockerfile
     container_name: artisan
     volumes:
-      - .:/var/www/html
+      - .:/var/www/html:delegated
     working_dir: /var/www/html
     entrypoint: ['php', 'artisan']
+    networks:
+      - laravel
+
+  phpunit:
+    build:
+      context: ./docker/local/php
+      dockerfile: php.dockerfile
+    container_name: phpunit
+    volumes:
+      - .:/var/www/html:delegated
+    working_dir: /var/www/html
+    entrypoint: ["/var/www/html/vendor/bin/phpunit"]
     networks:
       - laravel
 
@@ -74,7 +99,7 @@ services:
     image: node:current-alpine
     container_name: yarn
     volumes:
-      - .:/var/www/html
+      - .:/var/www/html:delegated
     working_dir: /var/www/html
     entrypoint: ['yarn']
     networks:
