@@ -7,8 +7,8 @@ networks:
 services:
   nginx:
     build:
-      context: ./docker/local/nginx
-      dockerfile: nginx.dockerfile
+      context: .
+      dockerfile: docker/local/nginx/nginx.dockerfile
     container_name: nginx
     depends_on:
       - php
@@ -24,8 +24,8 @@ services:
 
   php:
     build:
-      context: ./docker/local/php
-      dockerfile: php.dockerfile
+      context: .
+      dockerfile: docker/local/php/php.dockerfile
     container_name: php
     ports:
       - "9000:9000"
@@ -79,7 +79,7 @@ services:
     volumes:
       - .:/var/www/html:delegated
     working_dir: /var/www/html
-    entrypoint: ['php', 'artisan']
+    entrypoint: [ 'php', 'artisan' ]
     networks:
       - laravel
 
@@ -91,7 +91,7 @@ services:
     volumes:
       - .:/var/www/html:delegated
     working_dir: /var/www/html
-    entrypoint: ["/var/www/html/vendor/bin/phpunit"]
+    entrypoint: [ "/var/www/html/vendor/bin/phpunit" ]
     networks:
       - laravel
 
@@ -101,6 +101,6 @@ services:
     volumes:
       - .:/var/www/html:delegated
     working_dir: /var/www/html
-    entrypoint: ['yarn']
+    entrypoint: [ 'yarn' ]
     networks:
       - laravel
