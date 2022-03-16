@@ -73,8 +73,8 @@ services:
 
   artisan:
     build:
-      context: ./docker/local/php
-      dockerfile: php.dockerfile
+      context: .
+      dockerfile: docker/local/php/php.dockerfile
     container_name: artisan
     volumes:
       - .:/var/www/html:delegated
@@ -85,8 +85,8 @@ services:
 
   phpunit:
     build:
-      context: ./docker/local/php
-      dockerfile: php.dockerfile
+      context: .
+      dockerfile: docker/local/php/php.dockerfile
     container_name: phpunit
     volumes:
       - .:/var/www/html:delegated
