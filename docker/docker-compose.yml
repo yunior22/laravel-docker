@@ -95,6 +95,16 @@ services:
     networks:
       - laravel
 
+  npm:
+    image: node:current-alpine
+    container_name: npm
+    volumes:
+      - .:/var/www/html:delegated
+    working_dir: /var/www/html
+    entrypoint: [ 'npm' ]
+    networks:
+      - laravel
+
   yarn:
     image: node:current-alpine
     container_name: yarn
