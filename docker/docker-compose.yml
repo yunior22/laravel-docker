@@ -36,6 +36,7 @@ services:
 
   mysql:
     image: mysql:8.0
+    # platform: linux/amd64 # Use for m1 macs
     container_name: mysql
     ports:
       - "3306:3306"
@@ -64,6 +65,7 @@ services:
 
   composer:
     image: composer:latest
+    # platform: linux/amd64 # Use for m1 macs
     container_name: composer
     volumes:
       - .:/var/www/html:delegated
@@ -97,6 +99,7 @@ services:
 
   npm:
     image: node:current-alpine
+    # platform: linux/amd64 # Use for m1 macs
     container_name: npm
     volumes:
       - .:/var/www/html:delegated
@@ -107,6 +110,7 @@ services:
 
   yarn:
     image: node:current-alpine
+    # platform: linux/amd64 # Use for m1 macs
     container_name: yarn
     volumes:
       - .:/var/www/html:delegated
