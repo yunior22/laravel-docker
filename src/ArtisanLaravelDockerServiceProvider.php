@@ -1,8 +1,9 @@
 <?php
 
-namespace Yunior22;
+namespace Yunior22\LaravelDocker;
 
 use Illuminate\Support\ServiceProvider;
+use Yunior22\LaravelDocker\Console\Commands\DockerCommand;
 
 class ArtisanLaravelDockerServiceProvider extends ServiceProvider
 {
@@ -14,7 +15,7 @@ class ArtisanLaravelDockerServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('command.yunior22.laravel-docker', function ($app) {
-            return $app['Yunior22\Commands\DockerCommand'];
+            return $app['Yunior22\LaravelDocker\Console\Commands\DockerCommand'];
         });
 
         $this->commands('command.yunior22.laravel-docker');
@@ -27,6 +28,10 @@ class ArtisanLaravelDockerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        return 0;
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                DockerCommand::class,
+            ]);
+        }
     }
 }

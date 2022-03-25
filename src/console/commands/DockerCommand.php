@@ -1,6 +1,6 @@
 <?php
 
-namespace Yunior22\Commands;
+namespace Yunior22\LaravelDocker\Console\Commands;
 
 use Illuminate\Console\Command;
 
@@ -27,7 +27,7 @@ class DockerCommand extends Command
      */
     public function handle()
     {
-        $dockerCompose = file_get_contents(__DIR__ . '/../../stubs/docker-compose.stub');
+        $dockerCompose = file_get_contents(__DIR__ . '/../../../stubs/docker-compose.stub');
 
         file_put_contents($this->laravel->basePath('docker-compose.yml'), $dockerCompose);
 

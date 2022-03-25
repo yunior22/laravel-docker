@@ -2,10 +2,14 @@
     "name": "yunior22/laravel-docker",
     "description": "Docker files for running a basic Laravel application for development only. Do not use for deployment with out making deployment settings.",
     "type": "library",
+    "keywords": ["laravel", "docker"],
     "license": "MIT",
     "autoload": {
+        "classmap": [
+            "src/console/commands/"
+        ],
         "psr-4": {
-            "Yunior22\\": "src/"
+            "Yunior22\\LaravelDocker\\": "src/"
         }
     },
     "authors": [
@@ -16,9 +20,12 @@
     ],
     "minimum-stability": "dev",
     "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        },
         "laravel": {
             "providers": [
-                "Yunior22\\ArtisanLaravelDockerServiceProvider"
+                "Yunior22\\LaravelDocker\\ArtisanLaravelDockerServiceProvider"
             ]
         }
     },
